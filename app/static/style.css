@@ -1,0 +1,49 @@
+.comment {
+    border-top:dotted 1px #ddd;
+    font-size:0.7em;
+}
+
+body.hidden{
+    display:none;
+}
+
+.backimg{
+    border: none;
+    background-color:white;
+    width: 50px;
+    background-repeat : no-repeat;
+    background-size: 37px;
+    background-position: center;
+}
+
+.loginForm{
+    width: 500px;
+    height: 300px;
+    margin: 10% auto;
+    border: 1px solid #359edc45;
+    border-radius : 10px;
+    text-align: center;
+}
+
+.loginbtn{
+    width: 100%;
+    background-color: white;
+    border-color: #b4dbf3;
+    color: black;
+    transition-duration: 0.5s;
+}
+
+
+.loginbtn:hover{
+    box-shadow: 0px 0px 3px 1px #b4dbf3;
+    background-color: #359edc45;
+}
+
+body{
+    word-break: keep-all;
+    font-family: 'Noto Sans KR', sans-serif !important;
+}
+
+.dropdown-menu{
+    width: 100%;
+}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container text-center">
+    <div class="mt-5" style="width: 80%;margin: 0 auto; border: 1px solid #dee2e6; border-radius: 5px;">
+        {% include "form_errors.html" %}
+        {% if request.method == "POST" and not get_flashed_messages()%}
+        <div class="alert alert-success" role="alert">
+          저장 되었습니다.
+        </div>
+        {% endif %}
+        <form style="width: 80%;margin:10% auto;" method="POST">
+                {{ form.csrf_token }}
+
+            <table class="table table-striped text-center">
+                <tr>
+                    <th>ID</th>
+                    <td>{{userinfo.username}}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{userinfo.email}}</td>
+                </tr>
+            </table>
+            <div>
+                <div class="form-group text-left">
+                    {{form.slack_token.label}}
+                    {{form.slack_token(class='form-control')}}
+                </div>
+                <div class="form-group text-left">
+                    {{form.slack_bot.label}}
+                    {{form.slack_bot(class='form-control')}}
+                </div>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="slack_flag" name="slack_flag" value="1" {% if form.slack_flag.data==1 %}checked{% endif %}>
+                  <label class="custom-control-label" for="slack_flag">Bot running</label>
+                </div>
+            </div>
+            <input type="submit" class="btn btn-primary mt-3" value="SAVE">
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}
+

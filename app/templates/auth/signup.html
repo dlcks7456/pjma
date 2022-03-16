@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    {% include "form_errors.html" %}
+    <div class="loginForm">
+        <form style="width: 80%;margin:10% auto;" method="POST">
+                {{ form.csrf_token }}
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text backimg" style="background-image:url('{{url_for('static', filename='img/user.png')}}');"></div>
+                    </div>
+                    {{form.username(class="form-control", placeholder="ID")}}
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text backimg" style="background-image:url('{{url_for('static', filename='img/pw.png')}}');"></div>
+                    </div>
+                    <input type="password" class="form-control" name="password1" id="password1" value="{{ form.password1.data|default('', true) }}" placeholder="Password">
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text backimg"></div>
+                    </div>
+                    <input type="password" class="form-control" name="password2" id="password2" value="{{ form.password2.data|default('', true) }}" placeholder="Check Password">
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text backimg"></div>
+                    </div>
+                    {{form.email(class="form-control", placeholder="email")}}
+                </div>
+                <div style="padding: 5px;">
+                    <div>
+                        <input type="submit" value="SIGN UP" class="loginbtn btn"/>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}
+

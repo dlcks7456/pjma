@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-3">
+    <form method="POST" class="post-form my-3">
+        <div class="row">
+            <div class="col-9">
+                <h4>프로젝트 등록</h4>
+            </div>
+            <div class="col-lg-3">
+                <div class="float-right">
+                    <button type="submit" class="btn btn-primary">SUBMIT</button>
+                    <a class="btn btn-danger" href="{% if project_id %}{{url_for('project.views', project_id=project_id)}}{% else %}{{url_for('project._list')}}{% endif %}">CANCLE</a>
+                </div>
+            </div>
+        </div>
+        {{ form.csrf_token }}
+        {% include "form_errors.html" %}
+        <div class="row align-items-center">
+            <div class="col-8">
+                <div class="form-group">
+                    {{form.name.label}}
+                    {{ form.name(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-4">
+                    <div class="custom-control custom-switch">
+                      <input type="checkbox" class="custom-control-input" id="tracking" name="tracking" value="1" {% if form.tracking.data==1 %}checked{% endif %}>
+                      <label class="custom-control-label" for="tracking">Tracking</label>
+                    </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {{form.type.label}}
+                    {{ form.type(class="selectpicker") }}
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {{form.tool.label}}
+                    {{ form.tool(class="selectpicker") }}
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {{form.country.label}}
+                    <select id="country" name="country" class="selectpicker" data-live-search="true" multiple data-selected-text-format="count > 3">
+                        {% for c in form.country.choices %}
+                            {% if form.country.data %}
+                                <option value="{{c[0]}}" {% if c[0] in form.country.data %}selected{% endif %}>{{c[1]}}</option>
+                            {% else %}
+                                <option value="{{c[0]}}">{{c[1]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {{form.status.label}}
+                    {{ form.status(class="selectpicker statusDropDown") }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    {{ form.startday.label }}
+                    <div class="input-group date datetimeFormat" id="startdaypicker" data-target-input="nearest">
+                        <input type="text" id="startday" name="startday" class="form-control datetimepicker-input" data-target="#startdaypicker" value="{{ form.startday.data or '' }}"/>
+                        <div class="input-group-append" data-target="#startdaypicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group d-none QC">
+                    {{ form.testlinkday.label }}
+                    <div class="input-group date datetimeFormat" id="testlinkdaypicker" data-target-input="nearest">
+                        <input type="text" id="testlinkday" name="testlinkday" class="form-control datetimepicker-input" data-target="#testlinkdaypicker" value="{{ form.testlinkday.data or '' }}"/>
+                        <div class="input-group-append" data-target="#testlinkdaypicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group d-none LIVE">
+                    {{ form.livelinkday.label }}
+                    <div class="input-group date datetimeFormat" id="livelinkdaypicker" data-target-input="nearest">
+                        <input type="text" id="livelinkday" name="livelinkday" class="form-control datetimepicker-input" data-target="#livelinkdaypicker" value="{{ form.livelinkday.data or '' }}"/>
+                        <div class="input-group-append" data-target="#livelinkdaypicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group d-none END">
+                    {{ form.endday.label }}
+                    <div class="input-group date datetimeFormat" id="enddaypicker" data-target-input="nearest">
+                        <input type="text" id="endday" name="endday" class="form-control datetimepicker-input" data-target="#enddaypicker" value="{{ form.endday.data or '' }}"/>
+                        <div class="input-group-append" data-target="#enddaypicker" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+
+            </div>
+            <div class="col-lg-3">
+                <div class="LIVE">
+                    {{form.testqc.label}}
+                    {{ form.testqc(class="form-control") }}
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="END">
+                    {{form.liveqc.label}}
+                    {{ form.liveqc(class="form-control") }}
+                 </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="END">
+                    {{form.sample.label}}
+                    {{ form.sample(class="form-control") }}
+                 </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            {{form.comment.label}}
+            {{form.comment(class="form-control", style="height: 300px;")|markdown}}
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script type='text/javascript'>
+//status
+function statusChange(){
+    $('.statusDropDown').change(function(){
+        var statusSelect = $('.statusDropDown').find('select option:selected').val();
+        if( statusSelect != '' ){
+            var statusArr = ['TEST', 'QC', 'LIVE', 'END'];
+
+            $.each(statusArr, function(index, name){
+                if( statusSelect == name ){
+                    $.each(statusArr, function(_index, _name){
+                        if(_index <= index){
+                            $('.' + _name).attr('class', 'form-group ' + _name);
+                        }else{
+                            $('.' + _name).attr('class', 'form-group d-none ' + _name);
+                        }
+                    });
+                }
+            });
+        }
+    }).trigger('change');
+}
+
+$(function () {
+    $('.selectpicker').selectpicker();
+    $('.datetimeFormat').datetimepicker({
+        format: "YYYY-MM-DD hh:mm"
+    });
+    statusChange();
+});
+</script>
+{% endblock %}
+

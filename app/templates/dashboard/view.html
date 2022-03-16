@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+
+    <!--Status-->
+    <h5>Project Status</h5>
+    <div class="row">
+        <div class="col-lg-2">
+            <table class="table">
+                <tr>
+                    <th>LIVE</th>
+                </tr>
+                <tr class="text-center">
+                    <td>{{ dbd.status()['LIVE'] }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-2">
+            <table class="table">
+                <tr>
+                    <th>QC</th>
+                </tr>
+                <tr class="text-center">
+                    <td>{{ dbd.status()['QC'] }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-2">
+            <table class="table">
+                <tr>
+                    <th>Programming</th>
+                </tr>
+                <tr class="text-center">
+                    <td>{{ dbd.status()['TEST'] }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-2">
+            <table class="table">
+                <tr>
+                    <th>END</th>
+                </tr>
+                <tr class="text-center">
+                    <td>{{ dbd.status()['END'] }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-2">
+            <table class="table">
+                <tr>
+                    <th>Total</th>
+                </tr>
+                <tr class="text-center">
+                    <td>{{ dbd.status()['TOTAL'] }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- Status End -->
+    <!-- Duration -->
+    <div class="row">
+        <div class="col-lg-10">
+            <h5>Duration</h5>
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Days</th>
+                    <th>Start ~ Test</th>
+                    <th>Test ~ Live</th>
+                    <th>Live ~ End</th>
+                    <th>Start ~ End</th>
+                </thead>
+                <tr>
+                    <th>Mean</th>
+                    <td>{{ dbd.duration()['start_test']['mean'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['test_live']['mean'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['live_end']['mean'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['start_end']['mean'] | safe or '' }}</td>
+                </tr>
+                <tr>
+                    <th>Max</th>
+                    <td>{{ dbd.duration()['start_test']['max'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['test_live']['max'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['live_end']['max'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['start_end']['max'] | safe or '' }}</td>
+                </tr>
+                <tr>
+                    <th>Min</th>
+                    <td>{{ dbd.duration()['start_test']['min'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['test_live']['min'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['live_end']['min'] | safe or '' }}</td>
+                    <td>{{ dbd.duration()['start_end']['min'] | safe or '' }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <!-- Duration End -->
+
+    <!-- Chart row3 -->
+    <div class="row mt-3">
+        <div class="col-lg-4">
+            <h5>QC Count</h5>
+            <table class="table table-striped text-center">
+                <thead>
+                    <th>Count</th>
+                    <th>TEST</th>
+                    <th>LIVE</th>
+                </thead>
+                <tr>
+                    <th>Mean</th>
+                    <td>{{ dbd.qc()['testqc']['mean'] | safe or '' }}</td>
+                    <td>{{ dbd.qc()['liveqc']['mean'] | safe or '' }}</td>
+                </tr>
+                <tr>
+                    <th>Max</th>
+                    <td>{{ dbd.qc()['testqc']['max'] | safe or '' }}</td>
+                    <td>{{ dbd.qc()['liveqc']['max'] | safe or '' }}</td>
+                </tr>
+                <tr>
+                    <th>Min</th>
+                    <td>{{ dbd.qc()['testqc']['min'] | safe or '' }}</td>
+                    <td>{{ dbd.qc()['liveqc']['min'] | safe or '' }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-lg-6">
+            <h5>Monthly</h5>
+            <canvas id="month_qc_line" width="100%" height="45px"></canvas>
+        </div>
+    </div>
+    <!-- Chart row3 End -->
+
+    <!-- Chart row1 -->
+    <div class="row" style="margin-top: 30px;">
+        <div class="col-lg-3">
+            <h5>Survey Type</h5>
+            <canvas id="type_pie" width="100%"></canvas>
+        </div>
+        <div class="col-lg-3">
+            <h5>Tool</h5>
+            <canvas id="tool_pie" width="100%"></canvas>
+        </div>
+        <div class="col-lg-3">
+            <h5>Tracking</h5>
+            <canvas id="tracking_pie" width="100%"></canvas>
+        </div>
+    </div>
+    <!-- Chart row1 End -->
+
+    <!-- Chart row2 -->
+    <div class="row" style="margin-top: 30px;">
+        <h5>Country</h5>
+        <div class="col-lg-3">
+            <canvas id="kor_foreign_bar" width="100%" height="300px"></canvas>
+        </div>
+        <div class="col-lg-6">
+            <canvas id="country_bar" width="100%" height="300px"></canvas>
+        </div>
+    </div>
+    <!-- Chart row2 End -->
+
+    <!-- Chart row4 -->
+    <div class="row" style="margin-top: 30px;">
+        <h5>Sample</h5>
+        <div class="col-lg-9 text-center">
+            <canvas id="sample_bar" width="100%"></canvas>
+        </div>
+    </div>
+    <!-- Chart row4 End -->
+
+</div>
+{% endblock %}
+{% block script %}
+<script>
+pie_chart('type_pie', {{dbd.sa('type')['labels'] | safe}}, {{dbd.sa('type')['data'] | safe}}, {{dbd.sa('type')['color'] | safe}}, "Survey Type")
+pie_chart('tool_pie', {{dbd.sa('tool')['labels'] | safe}}, {{dbd.sa('tool')['data'] | safe}}, {{dbd.sa('tool')['color'] | safe}}, "Survey Tool")
+pie_chart('tracking_pie', {{dbd.tracking()['labels'] | safe}}, {{dbd.tracking()['data'] | safe}}, {{dbd.tracking()['color'] | safe}}, "Tracking")
+
+bar_chart('kor_foreign_bar', {{dbd.country_2way()['labels'] | safe}}, {{dbd.country_2way()['data'] | safe}}, {{dbd.country_2way()['color'] | safe}}, "KOR/MCP (total: {{dbd.country_2way()['total']}})")
+bar_chart('country_bar', {{dbd.country()['labels'] | safe}}, {{dbd.country()['data'] | safe}}, {{dbd.country()['color'] | safe}}, "country ({{dbd.country()['total'] | safe}})")
+
+month_qc_line('month_qc_line', {{dbd.month_qc()['testqc'] | safe}}, {{dbd.month_qc()['liveqc'] | safe}}, {{dbd.month_qc()['project_count'] | safe}}, {{dbd.month_qc()['sample_count'] | safe}})
+month_sample_bar('sample_bar', {{dbd.month_qc()['sample_count'] | safe}}, "sample (total : {{dbd.month_qc()['total_sample'] | comma_number or 0}}'s')")
+</script>
+{% endblock %}
+
