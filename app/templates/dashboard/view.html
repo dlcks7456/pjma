@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
-
+    <div class="row mt-5" style="width: 80px">
+        <form method="get" id="filt">
+        Year<select class="form-control form-control-sm" name="year" id="year">
+            {% for y in yearList %}
+            <option value="{{y}}" {% if y==year %}selected{% endif %}>{{y}}</option>
+            {% endfor %}
+        </select>
+        </form>
+    </div>
     <!--Status-->
-    <h5>Project Status</h5>
-    <div class="row">
+    <div class="mt-3">
+        <h5>Project Status</h5>
+    </div>
+    <div class="row ">
         <div class="col-lg-2">
             <table class="table">
                 <tr>
@@ -180,6 +190,13 @@ bar_chart('country_bar', {{dbd.country()['labels'] | safe}}, {{dbd.country()['da
 
 month_qc_line('month_qc_line', {{dbd.month_qc()['testqc'] | safe}}, {{dbd.month_qc()['liveqc'] | safe}}, {{dbd.month_qc()['project_count'] | safe}}, {{dbd.month_qc()['sample_count'] | safe}})
 month_sample_bar('sample_bar', {{dbd.month_qc()['sample_count'] | safe}}, "sample (total : {{dbd.month_qc()['total_sample'] | comma_number or 0}}'s')")
+
+$(document).ready(function(){
+    $("#year").change(function(){
+        $('#filt').submit();
+    });
+});
+
 </script>
 {% endblock %}
 

@@ -80,7 +80,11 @@ def login():
             return redirect(url_for('project._list'))
 
         flash(error)
-    return render_template('auth/login.html', form=form)
+
+    if g.user :
+        return redirect(url_for('project._list'))
+    else :
+        return render_template('auth/login.html', form=form)
 
 @bp.route('/info/', methods=("GET", "POST"))
 @login_required

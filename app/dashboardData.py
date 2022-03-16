@@ -141,6 +141,7 @@ class dashboardData :
     def duration(self):
         try :
             days_df = self.df[['start_test', 'test_live', 'live_end', 'start_end']]
+
             return {'start_test': dict(days_df['start_test'].describe().round()),
                     'test_live' : dict(days_df['test_live'].describe().round()),
                     'live_end' : dict(days_df['live_end'].describe().round()),

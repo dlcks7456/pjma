@@ -9,10 +9,11 @@ from ..fnc import *
 from .auth_views import login_required
 from ..dashboardData import dashboardData
 import pandas as pd
+from datetime import datetime
 
 bp = Blueprint('report', __name__, url_prefix='/report')
 
-@bp.route('/dashboard')
+@bp.route('/dashboard/')
 @login_required
 def dashboard():
     # 본인 프로젝트만 현황 확인
@@ -20,9 +21,18 @@ def dashboard():
     df = pd.read_sql(project_list.statement, project_list.session.bind)
     df.set_index('id', inplace=True)
 
-    dbd = dashboardData(df)
 
-    return render_template('dashboard/view.html', dbd=dbd)
+    year = request.args.get('year', type=int, default=datetime.now().year)
+
+    data_df = df[df['startday'].dt.year == year]
+    data_df.fillna('', inplace=True)
+
+    dbd = dashboardData(data_df)
+
+    year_df = df.set_index('startday')
+    yearList = list(set([n.year for n, g in year_df.groupby(pd.Grouper(freq='Y'))]))
+
+    return render_template('dashboard/view.html', dbd=dbd, year=year, yearList=yearList)
 
 
 @bp.route('/download')
